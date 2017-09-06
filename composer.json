@@ -1,0 +1,12 @@
+{
+    "license": "EUPL",
+    "name": "ec-europa/backtrac-php-client",
+    "require": {
+        "tcdent/php-restclient": "^0.1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "EC\\Utils\\Backtrac\\": "src"
+        }
+    }
+}
