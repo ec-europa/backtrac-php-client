@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed75e301e8d44eca765c65c188ca5816",
+    "content-hash": "f8e3dbeb78b4d9b01d26b4897001369e",
     "packages": [
         {
             "name": "tcdent/php-restclient",
