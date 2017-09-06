@@ -3,6 +3,9 @@ namespace EC\Utils\Backtrac {
     class Client
     {
         const BACKTRAC_API_ENDPOINT = 'https://backtrac.io/api';
+        const COMPARE_PROD_STAGE = 'compare_prod_stage';
+        const COMPARE_PROD_DEV= 'compare_prod_dev';
+        const COMPARE_STAGE_DEV= 'compare_stage_dev';
 
         /**
          * @var string Backtrac project id
@@ -34,6 +37,20 @@ namespace EC\Utils\Backtrac {
             ];
             $this->httpClient->options['base_url'] =  self::BACKTRAC_API_ENDPOINT;
 
+        }
+
+        /**
+         * Request a compare between 2 environment
+         *
+         * @param $method string One of the self::COMPARE_* constant
+         * @return mixed
+         */
+        public function compareEnvironments($method)
+        {
+            $url = '/project/'.$this->projectId.'/'.$method;
+            return $this->checkResponse($this->httpClient->post(
+                $url
+            ));
         }
 
         /**
@@ -74,5 +91,88 @@ namespace EC\Utils\Backtrac {
             }
             return $response;
         }
+
+        /**
+         * @param Website $website
+         * @return mixed
+         */
+        public function setProductionWebsite(Website $website) {
+            $url = '/project/'.$this->projectId;
+            return $this->checkResponse($this->httpClient->put(
+                $url,
+                [
+                    'prod' => [
+                        'url' => $website->url
+                    ]
+                ]
+            ));
+        }
+
+        /**
+         * @param Website $website
+         * @return mixed
+         */
+        public function setStageWebsite(Website $website) {
+            $url = '/project/'.$this->projectId;
+            return $this->checkResponse($this->httpClient->put(
+                $url,
+                [
+                    'stage' => [
+                        'url' => $website->url
+                    ]
+                ]
+            ));
+        }
+
+        /**
+         * @param Website $website
+         * @return mixed
+         */
+        public function setDevWebsite(Website $website) {
+            $url = '/project/'.$this->projectId;
+            return $this->checkResponse($this->httpClient->put(
+                $url,
+                [
+                    'dev' => [
+                        'url' => $website->url
+                    ]
+                ]
+            ));
+        }
+
+        /**
+         * Gets a job / diff result
+         *
+         * Results is (decoded ) :
+         *
+         * {"status":"success","result":{"message":"Diff is completed","result":"Amount of differences: 100 %"}}
+         *
+         * @param $id
+         * @return mixed
+         */
+        public function getResult($id) {
+            $url = '/result/'.$id;
+            return $this->checkResponse($this->httpClient->put(
+                $url
+            ));
+        }
+
+        /**
+         * Wait for the end of the diff to return the result :
+         *
+         * Highly experimental, relying on "Diff is completed" text
+         * is unreliable
+         *
+         * @param $id
+         * @param int $timeout
+         * @return mixed
+         */
+        public function waitForResults($id, $timeout=10) {
+            while($this->getResult($id)->result->message !== "Diff is completed") {
+                sleep($timeout);
+            }
+            return $this->getResult($id);
+        }
+
     }
 }

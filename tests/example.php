@@ -4,6 +4,35 @@ $client = new \EC\Utils\Backtrac\Client(
     1,
     'aaaaaaaaaaaaaaa'
 );
+
+/**
+ * Create a website object
+ */
+$website = new \EC\Utils\Backtrac\Website('test-site','http://ci-test.com');
+
+/**
+ * Set the new url for dev :
+ */
+$client->setDevWebsite($website);
+
+/**
+ * Compare prod a dev :
+ */
+$diffId = $client->compareEnvironments(
+  \EC\Utils\Backtrac\Client::COMPARE_PROD_DEV
+)->result->nid;
+
+/**
+ * Wait for the end of the diff and display result :
+ */
+
+var_dump(
+  $client->waitForResults($diffId)
+);
+
+/**
+ * Custom compare :
+ */
 var_dump(
     $client->customCompare(
         'my_diff',
@@ -11,3 +40,5 @@ var_dump(
         new \EC\Utils\Backtrac\Website('site_2', 'http://xxx.yyy/zzzzw')
     )
 );
+
+
