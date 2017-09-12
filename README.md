@@ -2,11 +2,17 @@
 
 This projects includes both a client library and a phing helper to trigger visual comparaison.
 
-## Library
+## Installation
+
+```sh
+composer require ec-europa/backtrac-php-client
+```
+
+## Usage as library
 
 See [example.php](tests/example.php)
 
-## Phing task
+## Usage as Phing task
 ```xml
 <?xml version="1.0" ?>
 
