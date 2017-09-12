@@ -1,6 +1,9 @@
 <?php
+
 namespace EC\Utils\Backtrac {
-    class Website {
+
+    class Website
+    {
         /**
          * @var string $name Website name
          */
@@ -15,7 +18,7 @@ namespace EC\Utils\Backtrac {
          * @param $name
          * @param $url
          */
-        function __construct($name, $url)
+        public function __construct($name, $url)
         {
             $this->name = $name;
             $this->url = $url;

@@ -1,11 +1,13 @@
 <?php
+
 namespace EC\Utils\Backtrac {
+
     class Client
     {
         const BACKTRAC_API_ENDPOINT = 'https://backtrac.io/api';
         const COMPARE_PROD_STAGE = 'compare_prod_stage';
-        const COMPARE_PROD_DEV= 'compare_prod_dev';
-        const COMPARE_STAGE_DEV= 'compare_stage_dev';
+        const COMPARE_PROD_DEV = 'compare_prod_dev';
+        const COMPARE_STAGE_DEV = 'compare_stage_dev';
 
         /**
          * @var string Backtrac project id
@@ -35,8 +37,7 @@ namespace EC\Utils\Backtrac {
                 'Accept' => 'application/json',
                 'x-api-key' => $this->apiKey
             ];
-            $this->httpClient->options['base_url'] =  self::BACKTRAC_API_ENDPOINT;
-
+            $this->httpClient->options['base_url'] = self::BACKTRAC_API_ENDPOINT;
         }
 
         /**
@@ -47,7 +48,7 @@ namespace EC\Utils\Backtrac {
          */
         public function compareEnvironments($method)
         {
-            $url = '/project/'.$this->projectId.'/'.$method;
+            $url = '/project/' . $this->projectId . '/' . $method;
             return $this->checkResponse($this->httpClient->post(
                 $url
             ));
@@ -62,7 +63,7 @@ namespace EC\Utils\Backtrac {
          */
         public function customCompare($diffName, Website $site1, Website $site2)
         {
-            $url = '/project/'.$this->projectId.'/custom_compare';
+            $url = '/project/' . $this->projectId . '/custom_compare';
             return $this->checkResponse($this->httpClient->post(
                 $url,
                 [
@@ -81,13 +82,14 @@ namespace EC\Utils\Backtrac {
          * @return mixed
          * @throws \Exception
          */
-        public function checkResponse(\RestClient $client) {
+        public function checkResponse(\RestClient $client)
+        {
             if (empty($client->response)) {
                 throw new \Exception('Empty response from API');
             }
             $response = json_decode($client->response);
-            if(empty($response) || $response->status !== "success") {
-                throw new \Exception('API call failed : '.$client->response);
+            if (empty($response) || $response->status !== "success") {
+                throw new \Exception('API call failed : ' . $client->response);
             }
             return $response;
         }
@@ -96,8 +98,9 @@ namespace EC\Utils\Backtrac {
          * @param Website $website
          * @return mixed
          */
-        public function setProductionWebsite(Website $website) {
-            $url = '/project/'.$this->projectId;
+        public function setProductionWebsite(Website $website)
+        {
+            $url = '/project/' . $this->projectId;
             return $this->checkResponse($this->httpClient->put(
                 $url,
                 [
@@ -112,8 +115,9 @@ namespace EC\Utils\Backtrac {
          * @param Website $website
          * @return mixed
          */
-        public function setStageWebsite(Website $website) {
-            $url = '/project/'.$this->projectId;
+        public function setStageWebsite(Website $website)
+        {
+            $url = '/project/' . $this->projectId;
             return $this->checkResponse($this->httpClient->put(
                 $url,
                 [
@@ -128,8 +132,9 @@ namespace EC\Utils\Backtrac {
          * @param Website $website
          * @return mixed
          */
-        public function setDevWebsite(Website $website) {
-            $url = '/project/'.$this->projectId;
+        public function setDevWebsite(Website $website)
+        {
+            $url = '/project/' . $this->projectId;
             return $this->checkResponse($this->httpClient->put(
                 $url,
                 [
@@ -150,8 +155,9 @@ namespace EC\Utils\Backtrac {
          * @param $id
          * @return mixed
          */
-        public function getResult($id) {
-            $url = '/result/'.$id;
+        public function getResult($id)
+        {
+            $url = '/result/' . $id;
             return $this->checkResponse($this->httpClient->put(
                 $url
             ));
@@ -167,12 +173,12 @@ namespace EC\Utils\Backtrac {
          * @param int $timeout
          * @return mixed
          */
-        public function waitForResults($id, $timeout=10) {
-            while($this->getResult($id)->result->message !== "Diff is completed") {
+        public function waitForResults($id, $timeout = 10)
+        {
+            while ($this->getResult($id)->result->message !== "Diff is completed") {
                 sleep($timeout);
             }
             return $this->getResult($id);
         }
-
     }
 }

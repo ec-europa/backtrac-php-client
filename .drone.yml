@@ -1,0 +1,9 @@
+pipeline:
+  install:
+    image: fpfis/php56-dev
+    commands:
+      - composer install
+  phpcs:
+    image: fpfis/php56-dev
+    commands:
+      - ./vendor/bin/phpcs

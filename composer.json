@@ -2,11 +2,18 @@
     "license": "EUPL",
     "name": "ec-europa/backtrac-php-client",
     "require": {
-        "tcdent/php-restclient": "^0.1.6"
+        "tcdent/php-restclient": "^0.1.6",
+        "phing/phing": "~2.10"
     },
     "autoload": {
         "psr-4": {
-            "EC\\Utils\\Backtrac\\": "src"
+            "EC\\Utils\\Backtrac\\": "src/"
+        },
+        "psr-0": {
+            "BacktracTasks\\" : "phing/"
         }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.0"
     }
 }
