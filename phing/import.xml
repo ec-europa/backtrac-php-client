@@ -1,0 +1,4 @@
+<project>
+    <taskdef name="backtrac-compare" classname="BacktracTasks\BacktracCompareTask" />
+    <taskdef name="backtrac-set-url" classname="BacktracTasks\BacktracSetUrlTask" />
+</project>
