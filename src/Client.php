@@ -66,7 +66,7 @@ namespace EC\Utils\Backtrac {
         {
             $url = '/project/' . $this->projectId . '/custom_compare';
             return $this->checkResponse($this->httpClient->post(
-                $url, [
+                $url,
                 json_encode([
                     'url1' => $site1->url,
                     'url2' => $site2->url,
