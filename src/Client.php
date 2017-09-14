@@ -30,6 +30,7 @@ namespace EC\Utils\Backtrac {
         public function __construct($projectId, $apiKey)
         {
             $this->apiKey = $apiKey;
+            $this->projectId = $projectId;
             $this->httpClient = new \RestClient();
             $this->httpClient->options['user_agent'] = 'EC-BACKTRAC-PHP-CLIENT/0.1';
             $this->httpClient->options['curl_options'] = [];
@@ -65,14 +66,14 @@ namespace EC\Utils\Backtrac {
         {
             $url = '/project/' . $this->projectId . '/custom_compare';
             return $this->checkResponse($this->httpClient->post(
-                $url,
+                $url, json_encode(
                 [
                     'url1' => $site1->url,
                     'url2' => $site2->url,
                     'sn1_name' => $site1->name,
                     'sn2_name' => $site2->name,
                     'diff_name' => $diffName
-                ]
+                ])
             ));
         }
 
@@ -103,11 +104,11 @@ namespace EC\Utils\Backtrac {
             $url = '/project/' . $this->projectId;
             return $this->checkResponse($this->httpClient->put(
                 $url,
-                [
+                json_encode([
                     'prod' => [
                         'url' => $website->url
                     ]
-                ]
+                ])
             ));
         }
 
@@ -120,11 +121,11 @@ namespace EC\Utils\Backtrac {
             $url = '/project/' . $this->projectId;
             return $this->checkResponse($this->httpClient->put(
                 $url,
-                [
+                json_encode([
                     'stage' => [
                         'url' => $website->url
                     ]
-                ]
+                ])
             ));
         }
 
@@ -137,11 +138,11 @@ namespace EC\Utils\Backtrac {
             $url = '/project/' . $this->projectId;
             return $this->checkResponse($this->httpClient->put(
                 $url,
-                [
+                json_encode([
                     'dev' => [
                         'url' => $website->url
                     ]
-                ]
+                ])
             ));
         }
 
