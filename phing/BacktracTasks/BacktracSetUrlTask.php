@@ -32,6 +32,20 @@ namespace BacktracTasks {
             $this->url = $str;
         }
 
+        private $username;
+
+        public function setUsername($str)
+        {
+            $this->username = $str;
+        }
+
+        private $pass;
+
+        public function setPassword($str)
+        {
+            $this->pass = $str;
+        }
+
         public function init()
         {
         }
@@ -49,22 +63,16 @@ namespace BacktracTasks {
             $website = new \EC\Utils\Backtrac\Website('test-site', $this->url);
 
             // Dirty mode :
-            switch ($this->environment) {
-                case 'dev':
-                    $client->setDevWebsite($website);
-                    break;
-                case 'prod':
-                    $client->setProductionWebsite($website);
-                    break;
-                case 'staging':
-                    $client->setStageWebsite($website);
-                    break;
-                default:
-                    throw new \ConfigurationException("Backtrac environment should be one of dev/prod/staging");
-                    break;
+            if (in_array($this->environment, ['prod', 'stage', 'dev'])) {
+                $client->setWebsite($website, $this->environment);
+                $this->log('Backtrac environment ' . $this->environment . ' url set to ' . $this->url);
+            }
+            else
+            {
+                throw new \ConfigurationException("Backtrac environment should be one of dev/prod/staging");
             }
 
-            $this->log('Backtrac environment ' . $this->environment . ' url set to ' . $this->url . PHP_EOL);
+
         }
     }
 }

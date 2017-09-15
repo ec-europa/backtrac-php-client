@@ -8,12 +8,12 @@ $client = new \EC\Utils\Backtrac\Client(
 /**
  * Create a website object
  */
-$website = new \EC\Utils\Backtrac\Website('test-site','http://ci-test.com');
+$website = new \EC\Utils\Backtrac\Website('test-site','http://ci-test.com', 'user', 'pass');
 
 /**
- * Set the new url for dev :
+ * Set the new url for the environment :
  */
-$client->setDevWebsite($website);
+$client->setWebsite($website, $environment);
 
 /**
  * Compare prod a dev :

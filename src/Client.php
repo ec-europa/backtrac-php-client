@@ -32,13 +32,15 @@ namespace EC\Utils\Backtrac {
             $this->apiKey = $apiKey;
             $this->projectId = $projectId;
             $this->httpClient = new \RestClient();
-            $this->httpClient->options['user_agent'] = 'EC-BACKTRAC-PHP-CLIENT/0.1';
-            $this->httpClient->options['curl_options'] = [];
-            $this->httpClient->options['headers'] = [
-                'Accept' => 'application/json',
-                'x-api-key' => $this->apiKey
+            $this->httpClient->options = [
+                'base_url' => self::BACKTRAC_API_ENDPOINT,
+                'user_agent' => 'EC-BACKTRAC-PHP-CLIENT/0.1',
+                'curl_options' => [],
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'x-api-key' => $this->apiKey,
+                ],
             ];
-            $this->httpClient->options['base_url'] = self::BACKTRAC_API_ENDPOINT;
         }
 
         /**
@@ -50,9 +52,7 @@ namespace EC\Utils\Backtrac {
         public function compareEnvironments($method)
         {
             $url = '/project/' . $this->projectId . '/' . $method;
-            return $this->checkResponse($this->httpClient->post(
-                $url
-            ));
+            return $this->checkResponse($this->httpClient->post($url));
         }
 
         /**
@@ -65,85 +65,33 @@ namespace EC\Utils\Backtrac {
         public function customCompare($diffName, Website $site1, Website $site2)
         {
             $url = '/project/' . $this->projectId . '/custom_compare';
-            return $this->checkResponse($this->httpClient->post(
-                $url,
-                json_encode([
-                    'url1' => $site1->url,
-                    'url2' => $site2->url,
-                    'sn1_name' => $site1->name,
-                    'sn2_name' => $site2->name,
-                    'diff_name' => $diffName
-                ])
-            ));
-        }
+            $payload = json_encode([
+              'url1' => $site1->url,
+              'url2' => $site2->url,
+              'sn1_name' => $site1->title,
+              'sn2_name' => $site2->title,
+              'diff_name' => $diffName
+            ]);
 
-        /**
-         * Checks an API response and return the decoded object, or throw an exception if failed.
-         * @param \RestClient $client
-         * @return mixed
-         * @throws \Exception
-         */
-        public function checkResponse(\RestClient $client)
-        {
-            if (empty($client->response)) {
-                throw new \Exception('Empty response from API');
-            }
-            $response = json_decode($client->response);
-            if (empty($response) || $response->status !== "success") {
-                throw new \Exception('API call failed : ' . $client->response);
-            }
-            return $response;
+            return $this->checkResponse($this->httpClient->post($url, $payload));
         }
 
         /**
          * @param Website $website
+         * @param $environment
          * @return mixed
          */
-        public function setProductionWebsite(Website $website)
+        public function setWebsite(Website $website, $environment)
         {
             $url = '/project/' . $this->projectId;
-            return $this->checkResponse($this->httpClient->put(
-                $url,
-                json_encode([
-                    'prod' => [
-                        'url' => $website->url
-                    ]
-                ])
-            ));
-        }
-
-        /**
-         * @param Website $website
-         * @return mixed
-         */
-        public function setStageWebsite(Website $website)
-        {
-            $url = '/project/' . $this->projectId;
-            return $this->checkResponse($this->httpClient->put(
-                $url,
-                json_encode([
-                    'stage' => [
-                        'url' => $website->url
-                    ]
-                ])
-            ));
-        }
-
-        /**
-         * @param Website $website
-         * @return mixed
-         */
-        public function setDevWebsite(Website $website)
-        {
-            $url = '/project/' . $this->projectId;
-            return $this->checkResponse($this->httpClient->put(
-                $url,
-                json_encode([
-                    'dev' => [
-                        'url' => $website->url
-                    ]
-                ])
-            ));
+            $payload = json_encode([
+              $environment => [
+                'username' => $website->username,
+                'url' => $website->url,
+                'pass' => $website->pass,
+              ],
+            ]);
+            return $this->checkResponse($this->httpClient->put($url, $payload));
         }
 
         /**
@@ -159,9 +107,7 @@ namespace EC\Utils\Backtrac {
         public function getResult($id)
         {
             $url = '/result/' . $id;
-            return $this->checkResponse($this->httpClient->put(
-                $url
-            ));
+            return $this->checkResponse($this->httpClient->put($url));
         }
 
         /**
@@ -180,6 +126,24 @@ namespace EC\Utils\Backtrac {
                 sleep($timeout);
             }
             return $this->getResult($id);
+        }
+
+        /**
+         * Checks an API response and return the decoded object, or throw an exception if failed.
+         * @param \RestClient $client
+         * @return mixed
+         * @throws \Exception
+         */
+        protected function checkResponse(\RestClient $client)
+        {
+            if (empty($client->response)) {
+                throw new \Exception('Empty response from API');
+            }
+            $response = json_decode($client->response);
+            if (empty($response) || $response->status !== "success") {
+                throw new \Exception('API call failed : ' . $client->response);
+            }
+            return $response;
         }
     }
 }
