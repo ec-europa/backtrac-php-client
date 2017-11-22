@@ -32,6 +32,10 @@ namespace EC\Utils\Backtrac {
          */
         public function __construct($name, $url, $username = '', $pass = '')
         {
+            if (empty($username) && empty($pass)) {
+                $this->username = arse_url($url, PHP_URL_USER);
+                $this->pass = parse_url($url, PHP_URL_PASS);
+            }
             $this->name = $name;
             $this->pass = $pass;
             $this->url = $url;
