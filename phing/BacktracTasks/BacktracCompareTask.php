@@ -11,6 +11,13 @@ namespace BacktracTasks {
             $this->auth_token = $str;
         }
 
+        private $check_results = true;
+
+        public function setCheck_results($bool)
+        {
+            $this->check_results = $bool;
+        }
+
         private $compare_mode;
 
         public function setCompare_mode($str)
@@ -40,6 +47,13 @@ namespace BacktracTasks {
              */
             $diffId = $client->compareEnvironments($this->compare_mode)->result->nid;
             $this->log('Backtrack diff ID :' . $diffId);
+
+            /**
+             * Wait for results if needed :
+             */
+            if ($this->check_results) {
+                $client->waitForResults($diffId);
+            }
         }
     }
 }

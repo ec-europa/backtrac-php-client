@@ -23,7 +23,7 @@ See [example.php](tests/example.php)
     <!-- Example target for comparing prod and dev. -->
     <target name="backtrac-test">
         <backtrac-set-url environment="dev" url="http://xyz.com" project_id="12" auth_token="xxxxxxxx" />
-        <backtrack-compare compare_mode="compare_prod_dev" project_id="12" auth_token="xxxxxxxx" />
+        <backtrac-compare compare_mode="compare_prod_dev" project_id="12" check_results="true" auth_token="xxxxxxxx" />
     </target>
 </project>
 ```
