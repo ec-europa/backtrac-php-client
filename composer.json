@@ -1,6 +1,6 @@
 {
-    "license": "EUPL",
     "name": "ec-europa/backtrac-php-client",
+    "license": "EUPL-1.1",
     "require": {
         "tcdent/php-restclient": "^0.1.6"
     },
