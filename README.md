@@ -1,6 +1,6 @@
 # Backtrac PHP client
 
-This projects includes both a client library and a phing helper to trigger visual comparaison.
+This projects includes both a client library and a phing helper to trigger visual comparison.
 
 ## Installation
 
@@ -22,8 +22,13 @@ See [example.php](tests/example.php)
     
     <!-- Example target for comparing prod and dev. -->
     <target name="backtrac-test">
-        <backtrac-set-url environment="dev" url="http://xyz.com" project_id="12" auth_token="xxxxxxxx" />
+        <backtrac-set-url environment="development" url="http://xyz.com" project_id="12" auth_token="xxxxxxxx" />
         <backtrac-compare compare_mode="compare_prod_dev" project_id="12" check_results="true" auth_token="xxxxxxxx" />
+    </target>
+    
+    <!-- Example target for comparing environment to latest snapshot. -->
+    <target name="backtrac-test">
+        <backtrac-compare compare_mode="compare_itself" environment="production" project_id="12" check_results="true" auth_token="xxxxxxxx" />
     </target>
 </project>
 ```
