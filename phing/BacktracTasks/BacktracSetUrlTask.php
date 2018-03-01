@@ -43,26 +43,8 @@ namespace BacktracTasks {
                 $this->auth_token
             );
 
-            /**
-             * Create a website object
-             */
-            $website = new \EC\Utils\Backtrac\Website('test-site', $this->url);
-
-            // Dirty mode :
-            switch ($this->environment) {
-                case 'dev':
-                    $client->setDevWebsite($website);
-                    break;
-                case 'prod':
-                    $client->setProductionWebsite($website);
-                    break;
-                case 'staging':
-                    $client->setStageWebsite($website);
-                    break;
-                default:
-                    throw new \ConfigurationException("Backtrac environment should be one of dev/prod/staging");
-                    break;
-            }
+            $website = new \EC\Utils\Backtrac\Website('test-site', $this->url, $this->environment);
+            $client->setWebsite($website);
 
             $this->log('Backtrac environment ' . $this->environment . ' url set to ' . $this->url . PHP_EOL);
         }

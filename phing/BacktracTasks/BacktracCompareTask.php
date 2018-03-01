@@ -25,6 +25,13 @@ namespace BacktracTasks {
             $this->compare_mode = $str;
         }
 
+        private $environment;
+
+        public function setEnvironment($str)
+        {
+            $this->environment = $str;
+        }
+
         private $project_id;
 
         public function setProject_id($str)
@@ -43,9 +50,17 @@ namespace BacktracTasks {
                 $this->auth_token
             );
             /**
-             * Compare prod a dev :
+             * Compare callbacks :
              */
-            $diffId = $client->compareEnvironments($this->compare_mode)->result->nid;
+            if (!in_array($this->compare_mode, array('compare_itself', 'snapshot'))) {
+                $diffId = $client->compareEnvironments($this->compare_mode)->result->nid;
+            }
+            elseif (empty($this->environment)) {
+                throw new \ConfigurationException("Environment parameter should be one of development, production or staging to take snapshot");
+            }
+            else {
+                $diffId = $client->takeSnapshot($this->compare_mode, $this->environment)->result->nid;
+            }
             $this->log('Backtrack diff ID :' . $diffId);
 
             /**

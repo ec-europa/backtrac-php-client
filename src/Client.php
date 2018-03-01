@@ -4,10 +4,16 @@ namespace EC\Utils\Backtrac {
 
     class Client
     {
+        // Base endpoint url.
         const BACKTRAC_API_ENDPOINT = 'https://backtrac.io/api';
+        // Compare options.
         const COMPARE_PROD_STAGE = 'compare_prod_stage';
         const COMPARE_PROD_DEV = 'compare_prod_dev';
         const COMPARE_STAGE_DEV = 'compare_stage_dev';
+        // Environments
+        const ENV_PROD = 'production';
+        const ENV_STAGE = 'staging';
+        const ENV_DEV = 'development';
 
         /**
          * @var string Backtrac project id
@@ -42,10 +48,11 @@ namespace EC\Utils\Backtrac {
         }
 
         /**
-         * Request a compare between 2 environment
+         * Request a compare between 2 environments
          *
-         * @param $method string One of the self::COMPARE_* constant
+         * @param $method string One of the self::COMPARE_* constants
          * @return mixed
+         * @throws \Exception
          */
         public function compareEnvironments($method)
         {
@@ -53,6 +60,37 @@ namespace EC\Utils\Backtrac {
             return $this->checkResponse($this->httpClient->post(
                 $url
             ));
+        }
+
+        /**
+         * Request a snapshot of environment
+         *
+         * @param string $method One of the self::COMPARE_* constants
+         * @param string $env One of the self::ENV_* constants
+         * @return mixed
+         * @throws \Exception
+         */
+        public function takeSnapshot($method, $env = '')
+        {
+            if (empty($env)) {
+                throw new \Exception('Environment parameter is missing to self compare.');
+            } elseif (!in_array($env, array(
+                self::ENV_DEV,
+                self::ENV_STAGE,
+                self::ENV_PROD
+            ))) {
+                throw new \Exception(
+                    "Backtrac environment should be one of development, production or staging"
+                );
+            } else {
+                $url = '/project/' . $this->projectId . '/' . $method;
+                return $this->checkResponse($this->httpClient->post(
+                    $url,
+                    json_encode([
+                    'env' => $env,
+                    ])
+                ));
+            }
         }
 
         /**
@@ -98,48 +136,26 @@ namespace EC\Utils\Backtrac {
         /**
          * @param Website $website
          * @return mixed
+         * @throws \Exception
          */
-        public function setProductionWebsite(Website $website)
+        public function setWebsite(Website $website)
         {
+            if (empty($website->env)) {
+                $website->env = self::ENV_DEV;
+            } elseif (!in_array($website->env, array(
+                self::ENV_DEV,
+                self::ENV_STAGE,
+                self::ENV_PROD
+            ))) {
+                throw new \Exception(
+                    "Backtrac environment should be one of development, production or staging"
+                );
+            }
             $url = '/project/' . $this->projectId;
             return $this->checkResponse($this->httpClient->put(
                 $url,
                 json_encode([
-                    'prod' => [
-                        'url' => $website->url
-                    ]
-                ])
-            ));
-        }
-
-        /**
-         * @param Website $website
-         * @return mixed
-         */
-        public function setStageWebsite(Website $website)
-        {
-            $url = '/project/' . $this->projectId;
-            return $this->checkResponse($this->httpClient->put(
-                $url,
-                json_encode([
-                    'stage' => [
-                        'url' => $website->url
-                    ]
-                ])
-            ));
-        }
-
-        /**
-         * @param Website $website
-         * @return mixed
-         */
-        public function setDevWebsite(Website $website)
-        {
-            $url = '/project/' . $this->projectId;
-            return $this->checkResponse($this->httpClient->put(
-                $url,
-                json_encode([
-                    'dev' => [
+                    $website->env => [
                         'url' => $website->url
                     ]
                 ])
