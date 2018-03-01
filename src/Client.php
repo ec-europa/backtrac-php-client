@@ -73,17 +73,21 @@ namespace EC\Utils\Backtrac {
         {
             if (empty($env)) {
                 throw new \Exception('Environment parameter is missing to self compare.');
-            }
-            elseif (!in_array($env, array(SELF::ENV_DEV, SELF::ENV_STAGE, SELF::ENV_PROD))) {
-                throw new \ConfigurationException("Backtrac environment should be one of development, production or staging");
-            }
-            else {
+            } elseif (!in_array($env, array(
+                self::ENV_DEV,
+                self::ENV_STAGE,
+                self::ENV_PROD
+            ))) {
+                throw new \Exception(
+                    "Backtrac environment should be one of development, production or staging"
+                );
+            } else {
                 $url = '/project/' . $this->projectId . '/compare_itself';
                 return $this->checkResponse($this->httpClient->post(
-                  $url,
-                  json_encode([
+                    $url,
+                    json_encode([
                     'env' => $env,
-                  ])
+                    ])
                 ));
             }
         }
@@ -136,10 +140,15 @@ namespace EC\Utils\Backtrac {
         public function setWebsite(Website $website)
         {
             if (empty($website->env)) {
-                $website->env = SELF::ENV_DEV;
-            }
-            elseif (!in_array($website->env, array(SELF::ENV_DEV, SELF::ENV_STAGE, SELF::ENV_PROD))) {
-                throw new \ConfigurationException("Backtrac environment should be one of development, production or staging");
+                $website->env = self::ENV_DEV;
+            } elseif (!in_array($website->env, array(
+                self::ENV_DEV,
+                self::ENV_STAGE,
+                self::ENV_PROD
+            ))) {
+                throw new \Exception(
+                    "Backtrac environment should be one of development, production or staging"
+                );
             }
             $url = '/project/' . $this->projectId;
             return $this->checkResponse($this->httpClient->put(

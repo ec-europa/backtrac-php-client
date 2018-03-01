@@ -16,7 +16,7 @@ See [example.php](tests/example.php)
 ```xml
 <?xml version="1.0" ?>
 
-<project default="backtrac-test" name="test" basedir=".">
+<project default="backtrac-compare-self" name="test" basedir=".">
     <!-- Import the phing tasks into your project. -->
     <import file="${project.basedir}/vendor/ec-europa/backtrac-php-client/phing/import.xml" />
     
@@ -32,7 +32,7 @@ See [example.php](tests/example.php)
     
     <!-- Example target for comparing environment to latest snapshot. -->
     <target name="backtrac-compare-self">
-        <backtrac-compare compare_mode="compare_itself" environment="production" project_id="12" check_results="true" auth_token="xxxxxxxx" />
+        <backtrac-compare compare_mode="compare_itself" environment="production" project_id="12" check_results="false" auth_token="xxxxxxxx" />
     </target>
 </project>
 ```
