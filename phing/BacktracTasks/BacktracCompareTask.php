@@ -52,14 +52,14 @@ namespace BacktracTasks {
             /**
              * Compare callbacks :
              */
-            if ($this->compare_mode != 'compare_itself') {
+            if (!in_array($this->compare_mode, array('compare_itself', 'snapshot'))) {
                 $diffId = $client->compareEnvironments($this->compare_mode)->result->nid;
             }
             elseif (empty($this->environment)) {
-                throw new \ConfigurationException("Environment parameter should be one of development, production or staging");
+                throw new \ConfigurationException("Environment parameter should be one of development, production or staging to take snapshot");
             }
             else {
-                $diffId = $client->compareItself($this->environment)->result->nid;
+                $diffId = $client->takeSnapshot($this->compare_mode, $this->environment)->result->nid;
             }
             $this->log('Backtrack diff ID :' . $diffId);
 

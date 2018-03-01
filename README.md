@@ -20,17 +20,22 @@ See [example.php](tests/example.php)
     <!-- Import the phing tasks into your project. -->
     <import file="${project.basedir}/vendor/ec-europa/backtrac-php-client/phing/import.xml" />
     
-    <!-- Example target for updating a website url for an environment. -->
+    <!-- Example target to update a website url for an environment. -->
     <target name="backtrac-update-url">
         <backtrac-set-url environment="development" url="http://xyz.com" project_id="12" auth_token="xxxxxxxx" />
     </target>
-    
-    <!-- Example target for comparing prod and dev. -->
+ 
+    <!-- Example target for comparing different environments: prod and dev. -->
     <target name="backtrac-compare-prod-dev">
         <backtrac-compare compare_mode="compare_prod_dev" project_id="12" check_results="true" auth_token="xxxxxxxx" />
     </target>
+
+    <!-- Example target to take single snapshot: before deployment or build. -->
+    <target name="backtrac-single-snapshot">
+        <backtrac-compare compare_mode="snapshot" environment="production" project_id="12" check_results="false" auth_token="xxxxxxxx" />
+    </target>
     
-    <!-- Example target for comparing environment to latest snapshot. -->
+    <!-- Example target for comparing environment to latest snapshot: after deployment or build. -->
     <target name="backtrac-compare-self">
         <backtrac-compare compare_mode="compare_itself" environment="production" project_id="12" check_results="false" auth_token="xxxxxxxx" />
     </target>

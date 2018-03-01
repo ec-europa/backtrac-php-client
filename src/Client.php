@@ -63,13 +63,14 @@ namespace EC\Utils\Backtrac {
         }
 
         /**
-         * Request a compare of current environment
+         * Request a snapshot of environment
          *
+         * @param string $method One of the self::COMPARE_* constants
          * @param string $env One of the self::ENV_* constants
          * @return mixed
          * @throws \Exception
          */
-        public function compareItself($env = '')
+        public function takeSnapshot($method, $env = '')
         {
             if (empty($env)) {
                 throw new \Exception('Environment parameter is missing to self compare.');
@@ -82,7 +83,7 @@ namespace EC\Utils\Backtrac {
                     "Backtrac environment should be one of development, production or staging"
                 );
             } else {
-                $url = '/project/' . $this->projectId . '/compare_itself';
+                $url = '/project/' . $this->projectId . '/' . $method;
                 return $this->checkResponse($this->httpClient->post(
                     $url,
                     json_encode([
