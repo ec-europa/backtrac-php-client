@@ -20,16 +20,22 @@ namespace EC\Utils\Backtrac {
         public $url;
 
         /**
+         * @var array $uris Website uris
+         */
+        public $uris;
+
+        /**
          * Website constructor
          * @param $env
          * @param $name
          * @param $url
          */
-        public function __construct($name, $url, $env = 'development')
+        public function __construct($name, $url, $env = 'development', $uris = [])
         {
             $this->env = $env;
             $this->name = $name;
             $this->url = $url;
+            $this->uris = $uris;
         }
     }
 }
