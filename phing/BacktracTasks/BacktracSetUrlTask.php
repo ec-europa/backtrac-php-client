@@ -32,6 +32,13 @@ namespace BacktracTasks {
             $this->url = $str;
         }
 
+        private $uris;
+
+        public function setUris($arr)
+        {
+            $this->uris = $arr;
+        }
+
         public function init()
         {
         }
@@ -43,7 +50,7 @@ namespace BacktracTasks {
                 $this->auth_token
             );
 
-            $website = new \EC\Utils\Backtrac\Website('test-site', $this->url, $this->environment);
+            $website = new \EC\Utils\Backtrac\Website('test-site', $this->url, $this->environment, $this->uris);
             $client->setWebsite($website);
 
             $this->log('Backtrac environment ' . $this->environment . ' url set to ' . $this->url . PHP_EOL);

@@ -152,13 +152,19 @@ namespace EC\Utils\Backtrac {
                 );
             }
             $url = '/project/' . $this->projectId;
+            $data = [
+              $website->env => [
+                'url' => $website->url
+              ],
+            ];
+            if (!empty($website->uris)) {
+                $data += [
+                    'uris' => $website->uris,
+                ];
+            }
             return $this->checkResponse($this->httpClient->put(
                 $url,
-                json_encode([
-                    $website->env => [
-                        'url' => $website->url
-                    ]
-                ])
+                json_encode($data)
             ));
         }
 
