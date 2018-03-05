@@ -152,9 +152,14 @@ namespace EC\Utils\Backtrac {
                 );
             }
             $url = '/project/' . $this->projectId;
+            $envs = [
+                self::ENV_DEV => 'dev',
+                self::ENV_STAGE => 'stage',
+                self::ENV_PROD => 'prod',
+            ;
             $data = [
-              $website->env => [
-                'url' => $website->url
+              $envs[$website->env] => [
+                'url' => $website->url,
               ],
             ];
             if (!empty($website->uris)) {
