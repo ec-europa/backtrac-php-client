@@ -156,7 +156,7 @@ namespace EC\Utils\Backtrac {
                 self::ENV_DEV => 'dev',
                 self::ENV_STAGE => 'stage',
                 self::ENV_PROD => 'prod',
-            ;
+            ];
             $data = [
               $envs[$website->env] => [
                 'url' => $website->url,
