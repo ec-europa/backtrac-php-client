@@ -102,8 +102,11 @@ namespace BacktracTasks {
              * Wait for results if needed :
              */
             if ($this->check_results) {
-                if ($client->waitForResults($jobId)) {
-                    $endResult = $client->getResult($jobId)->result;
+                while (empty($this->httpClient->put('/result/' . $jobId))) {
+                    echo "Receiving empty.";
+                    sleep 10;
+                }
+                if ($endResult = $client->getResult($jobId)->result) {
                     if (isset($endResult->message)) {
                         $this->log($endResult->message);
                     }
