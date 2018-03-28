@@ -73,8 +73,8 @@ namespace BacktracTasks {
             /**
              * Compare callbacks :
              */
-            if (is_numeric($this->compare_mode)) {
-                $jobId = $this->compare_mode;
+            if ($this->compare_mode === 'check_results') {
+                $jobId = $this->project_id;
                 $this->log("Awaiting result for job number: " . $jobId);
             }
             elseif (!in_array($this->compare_mode, array('compare_itself', 'snapshot'))) {
