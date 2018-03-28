@@ -124,7 +124,7 @@ namespace EC\Utils\Backtrac {
         public function checkResponse(\RestClient $client)
         {
             if (empty($client->response)) {
-                return null;
+                throw new \Exception('Empty response from API');
             }
             $response = json_decode($client->response);
             if (empty($response) || $response->status !== "success") {
@@ -203,11 +203,8 @@ namespace EC\Utils\Backtrac {
          */
         public function waitForResults($id, $timeout = 10)
         {
-            while (empty($this->getResult($id)) {
-                var_dump($this->getResult($id));
-                sleep($timeout);
-            }
-            while (strpos($this->getResult($id)->result->message, 'progress') !== false) {
+            var_dump($id);
+            while (strpos($this->getResult($id)->result->message, 'complete') === false) {
                 var_dump($this->getResult($id));
                 sleep($timeout);
             }
