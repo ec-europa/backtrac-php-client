@@ -89,7 +89,7 @@ namespace BacktracTasks {
             /**
              * Log action to user.
              */
-            if (!empty($result)) {
+            if (!empty($result) && !is_numeric($this->compare_mode)) {
                 $this->log($result->message);
                 $this->log($result->url);
                 $jobId = $result->nid;
