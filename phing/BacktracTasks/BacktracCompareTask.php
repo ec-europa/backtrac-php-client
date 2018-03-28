@@ -51,6 +51,7 @@ namespace BacktracTasks {
             // Get default properties from project.
             $properties_mapping = array(
                 'setAuth_token' => 'backtrac.auth_token',
+                'setCheck_results' => 'backtrac.check_results',
                 'setCompare_mode' => 'backtrac.compare_mode',
                 'setEnvironment' => 'backtrac.environment',
                 'setProject_id' => 'backtrac.project_id',
@@ -89,7 +90,7 @@ namespace BacktracTasks {
             /**
              * Log action to user.
              */
-            if (!empty($result) && !is_numeric($this->compare_mode)) {
+            if (!empty($result)) {
                 $this->log($result->message);
                 $this->log($result->url);
                 $jobId = $result->nid;
@@ -101,15 +102,12 @@ namespace BacktracTasks {
             /**
              * Wait for results if needed :
              */
-            if ($this->check_results) {
-                if ($client->waitForResults($jobId)) {
-                    $endResult = $client->getResult($jobId)->result;
-                    if (isset($endResult->message)) {
-                        $this->log($endResult->message);
-                    }
-                    if (isset($endResult->result)) {
-                        $this->log($endResult->result);
-                    }
+            if ($this->check_results && $endResult = $client->waitForResults($jobId)) {
+                if (isset($endResult->result->message)) {
+                    $this->log($endResult->result->message);
+                }
+                if (isset($endResult->result->result)) {
+                    $this->log($endResult->result->result);
                 }
             }
         }
