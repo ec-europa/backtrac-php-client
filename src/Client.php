@@ -203,7 +203,8 @@ namespace EC\Utils\Backtrac {
          */
         public function waitForResults($id, $timeout = 10)
         {
-            while (strpos($this->getResult($id)->result->message, 'complete') === false) {
+            while (empty(strpos($this->getResult($id)->result->message, 'complete'))) {
+                var_dump($this->getResult($id));
                 sleep($timeout);
             }
             return $this->getResult($id);
