@@ -46,6 +46,13 @@ namespace BacktracTasks {
             $this->results_file = $str;
         }
 
+        private $secure = true;
+
+        public function setSecure($bool)
+        {
+            $this->secure= $bool;
+        }
+
         public function init()
         {
             // Get default properties from project.
@@ -56,6 +63,7 @@ namespace BacktracTasks {
                 'setEnvironment' => 'backtrac.environment',
                 'setProject_id' => 'backtrac.project_id',
                 'setResults_file' => 'backtrac.results_file',
+                'setSecure' => 'backtrac.secure',
             );
             foreach ($properties_mapping as $class_method => $backtrac_property) {
                 if ($property = $this->getProject()->getProperty($backtrac_property)) {
@@ -68,7 +76,8 @@ namespace BacktracTasks {
         {
             $client = new \EC\Utils\Backtrac\Client(
                 $this->project_id,
-                $this->auth_token
+                $this->auth_token,
+                $this->secure
             );
             /**
              * Compare callbacks :

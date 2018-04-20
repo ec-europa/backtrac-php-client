@@ -17,6 +17,13 @@ namespace BacktracTasks {
         {
             $this->project_id = $str;
         }
+        
+        private $secure;
+
+        public function setSecure($bool)
+        {
+            $this->secure= $bool;
+        }
 
         private $environment;
 
@@ -47,7 +54,8 @@ namespace BacktracTasks {
         {
             $client = new \EC\Utils\Backtrac\Client(
                 $this->project_id,
-                $this->auth_token
+                $this->auth_token,
+                $this->secure
             );
 
             $website = new \EC\Utils\Backtrac\Website('test-site', $this->url, $this->environment, $this->uris);
