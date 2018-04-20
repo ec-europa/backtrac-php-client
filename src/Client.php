@@ -208,7 +208,7 @@ namespace EC\Utils\Backtrac {
          */
         public function waitForResults($id, $timeout = 10)
         {
-            while ($this->getResult($id)->result->message !== "Diff is completed") {
+            while (strpos($this->getResult($id)->result->message, 'complete') === false) {
                 sleep($timeout);
             }
             return $this->getResult($id);
