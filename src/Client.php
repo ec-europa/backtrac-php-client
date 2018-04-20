@@ -27,19 +27,24 @@ namespace EC\Utils\Backtrac {
          * @var string $token Backtrac.io api key
          */
         private $apiKey;
+        /**
+         * @var bool $secure
+         */
+        private $secure;
 
         /**
          * Backtrac ls teClient constructor.
          * @param $projectId string Backtrac project id
          * @param $apiKey string Backtrac api key
          */
-        public function __construct($projectId, $apiKey)
+        public function __construct($projectId, $apiKey, $secure = true)
         {
+            $curlopts = $secure ? [] : [ CURLOPT_SSL_VERIFYHOST => false, CURLOPT_SSL_VERIFYPEER => false ];
             $this->apiKey = $apiKey;
             $this->projectId = $projectId;
             $this->httpClient = new \RestClient();
             $this->httpClient->options['user_agent'] = 'EC-BACKTRAC-PHP-CLIENT/0.1';
-            $this->httpClient->options['curl_options'] = [];
+            $this->httpClient->options['curl_options'] = $curlopts;
             $this->httpClient->options['headers'] = [
                 'Accept' => 'application/json',
                 'x-api-key' => $this->apiKey
